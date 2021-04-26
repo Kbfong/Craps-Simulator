@@ -1,0 +1,243 @@
+Script started on Sun 06 Nov 2016 10:39:40 PM PST
+[?1034hbash-4.2$ cat Craps.java
+import java.util.Scanner;
+import java.util.Random;
+
+public class Craps
+{
+    public static void main(String[]args)
+    {
+	Scanner one = new Scanner(System.in);
+	System.out.println("Enter in your seed");
+	int seed = one.nextInt();
+	Random rand = new Random(seed); //This allows the game to be replicated
+	int chips = 0;
+	int bet = 0;
+	System.out.println("How many chips do you want?");
+	chips = one.nextInt(); //prompts the user to enter how many chips the player wants to play with
+	while(chips>0) //keeps running as long as the player has chips to bet with 
+	    {
+		
+		System.out.println("Enter your bet");
+		bet = one.nextInt(); //Allows the user to enter in their bet
+		while(bet > chips) //This stops the user from betting more than the chips available
+		    {
+			System.out.println("Not an okay bet");
+			System.out.println("Enter your bet");
+			bet = one.nextInt();
+		    }
+		System.out.println("Hit return to roll the dice");
+		roll(); //calls the method roll to roll the dice
+		int toss1 = rand.nextInt(6)+1; //creates a random value for a dice
+		int toss2 = rand.nextInt(6)+1; //creates a random value for a dice
+		System.out.println("Your rolls are " + toss1 + "," + toss2);
+		int points = toss1 + toss2; //the sum of the dice
+		if(points == 7 || points ==11) //if 7 or 11 you win
+		    {
+			chips += bet; //adds chips to total
+			System.out.println("You win, you now have " + chips);
+			
+		    }
+		else if( points == 2 || points ==3 || points ==12) // if 2 3 or 12 you lose
+		    {
+			chips = chips - bet; //subtracts chips from total
+			System.out.println("You lose, you now have " +  chips);
+		    }
+		else //the start of the rolls if a 2 3 7 or 12 is not a result
+		    {
+		  
+			System.out.println("The point is " + points);
+			System.out.println("Hit return to roll the dice");
+			roll();
+			int toss3 = rand.nextInt(6)+1; //creates random values for the next dice rolls
+			int toss4 = rand.nextInt(6)+1; // creates random values for the next dice rolls
+			int point2 = toss3 + toss4;
+			System.out.println("Your rolls are " + toss3 + "," + toss4);
+			if(point2 ==7)
+			    {
+				chips = chips - bet; //subtracts chips from mtotal if you get a 7 on the second roll
+				System.out.println("You lose, you now have " + chips);
+				
+			    }
+	     
+			while(point2 !=7 || point2 == points) //keeps rolling the dice until you win or lose
+			    {
+				int toss5 = rand.nextInt(6)+1;
+				int toss6 = rand.nextInt(6)+1;
+				point2 = toss5 + toss6;
+				System.out.println("Hit return to roll the dice");
+				roll();
+				System.out.println("Your rolls are " + toss5 + "," + toss6);
+				
+
+			 if(points == point2)
+			    {
+				chips += bet; //adds chips to total if the two points are equal
+				System.out.println("You win, you now have " + chips);
+				break; //breaks the while loop so that the program can start from the beginning if this outcome is achieved
+		   
+			    }
+			 else if(point2 ==7)
+			     {
+				 chips = chips - bet; //subtracts chips from total if 7 is the result
+				 System.out.println("You lose, you now have " + chips);
+				 break; //breaks the while loop so that the program can start from the beginning if this outcome is achieved
+			     }
+			     
+				
+			     
+			    }
+		    }
+	    }
+    }
+    
+     
+	       
+       public static  void roll()
+    {
+	Scanner in = new Scanner(System.in);
+	boolean rollAgain = false;
+	if(in.nextLine().equals(" ")) //this allows the user to press return to roll the dice when the method roll() is called
+	   {
+	       rollAgain = true;
+	       
+	   }
+    }
+ 
+    
+
+}
+bash-4.2$ javac Craps.java
+bash-4.2$ java Craps
+Enter in your seed
+1234
+How many chips do you want?
+1000
+Enter your bet
+500
+Hit return to roll the dice
+
+Your rolls are 3,6
+The point is 9
+Hit return to roll the dice
+
+Your rolls are 6,1
+You lose, you now have 500
+Enter your bet
+500
+Hit return to roll the dice
+
+Your rolls are 3,4
+You win, you now have 1000
+Enter your bet
+1000
+Hit return to roll the dice
+
+Your rolls are 2,2
+The point is 4
+Hit return to roll the dice
+
+Your rolls are 4,2
+Hit return to roll the dice
+
+Your rolls are 5,3
+Hit return to roll the dice
+
+Your rolls are 6,5
+Hit return to roll the dice
+
+Your rolls are 6,1
+You lose, you now have 0
+bash-4.2$ cat SimCraps.java
+import java.util.Scanner;
+import java.util.Random;
+
+public class SimCraps
+{
+    public static void main(String[]args)
+    {
+        Scanner one = new Scanner(System.in);
+        Random rand = new Random();
+        double losses = 0;
+	double wins = 0;
+	int trials =Integer.parseInt(args[0]); //This is for the user to pass an integer in the command line
+	int games = trials;
+        while(trials>0) //runs through all of the games the user inputs
+	    {
+                int toss1 = rand.nextInt(6)+1;
+                int toss2 = rand.nextInt(6)+1;
+                int points = toss1 + toss2;
+                if(points == 7 || points ==11)
+                    {
+			wins++; //adds a win to the win total if 7 or 11
+                  
+
+                    }
+                else if( points == 2 || points ==3 || points ==12)
+                    {
+			losses++; //adds a loss to the loss total if 2 3 or 12
+                       
+                    }
+                else //runs through multiple dice rolls when point is achieved until point is achieved again
+                    {
+
+                    
+                        int toss3 = rand.nextInt(6)+1;
+                        int toss4 = rand.nextInt(6)+1;
+                        int point2 = toss3 + toss4;
+                        if(point2 ==7)
+                            {
+				losses++; //adds a loss if the roll after point is 7
+         
+
+                            }
+
+                        while(point2 !=7 || point2 == points) //keeps running until a 7 or point is achieved
+                            {
+				
+					int toss5 = rand.nextInt(6)+1;
+					int toss6 = rand.nextInt(6)+1;
+					point2 = toss5 + toss6;
+					if(points == point2)
+					    {
+						wins++; //adds a win if both points are equal
+						break; //breaks the loops so the program can run from the start again
+
+					    }
+					else if(point2 ==7)
+					    {
+						losses++; //adds a loss if 7 is achieved after the initial point
+						
+						break; 
+					    }
+                            }
+			trials--; //allows the loop to run numerous times
+                    
+		    }
+	       
+    }
+	System.out.println("The probability of winning is " + wins/(wins+losses)); //Gets the probability of winning after x amount of games
+    }
+} 
+
+  
+
+
+bash-4.2$ javac SimCraps.java
+bash-4.2$ java SimCraps
+Exception in thread "main" java.lang.ArrayIndexOutOfBoundsException: 0
+	at SimCraps.main(SimCraps.java:12)
+bash-4.2$ java SimCraps 10000
+The probability of winning is 0.4518343991921912
+bash-4.2$ java SimCraps 100
+The probability of winning is 0.47058823529411764
+bash-4.2$ java SimCraps 150
+The probability of winning is 0.38009049773755654
+bash-4.2$ java SimCraps 175
+The probability of winning is 0.4635036496350365
+bash-4.2$ java SimCraps 1000[K[K[K500
+The probability of winning is 0.4473089099954772
+bash-4.2$ java [K[K[K[K[Kexit
+exit
+
+Script done on Sun 06 Nov 2016 10:41:30 PM PST
